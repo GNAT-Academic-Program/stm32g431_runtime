@@ -1,4 +1,4 @@
-# stm32g431 Runtimes
+# stm32g43 runtime
 
 This repository generates Ada/SPARK runtimes for the following SoC:
 * stm32g431

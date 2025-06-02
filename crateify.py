@@ -126,7 +126,7 @@ def main():
     parser.add_argument(
         "--version",
         type=str,
-        default="14.0.0-dev",
+        default="14.1.0",
         help="Version string to put in the alire.toml file",
     )
 

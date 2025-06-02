@@ -352,7 +352,7 @@ package Interfaces.STM32.GPIO is
 
    --  GPIO alternate function low register
    type AFRL_Register
-     (As_Array : Boolean := False)
+     (As_Array : Boolean := True)
    is record
       case As_Array is
          when False =>
@@ -380,7 +380,7 @@ package Interfaces.STM32.GPIO is
 
    --  GPIO alternate function high register
    type AFRH_Register
-     (As_Array : Boolean := False)
+     (As_Array : Boolean := True)
    is record
       case As_Array is
          when False =>

@@ -34,7 +34,9 @@ class STM32G431(arm.cortexm.ArmV7MTarget):
 
     @property
     def system_ads(self):
-        return {}
+        return {'light': 'system-xi-arm.ads',
+                'light-tasking': 'stm32g431_src/system-xi-stm32g431-sfp.ads',
+                'embedded': 'stm32g431_src/system-xi-stm32g431-full.ads'}
 
     @property
     def compiler_switches(self):
@@ -49,10 +51,11 @@ class STM32G431(arm.cortexm.ArmV7MTarget):
         self.add_linker_script('stm32g431_src/memory-map.ld', 'memory-map.ld')
 
         self.add_gnat_sources(
+            "stm32g431_src/s-bbbopa.ads",
             'stm32g431_src/s-bbmcpa.ads',
-            'stm32g431_src/s-bbmcpa.adb',
             'stm32g431_src/start-common.S',
             'stm32g431_src/start-rom.S',
+            #'stm32g431_src/setup_board.ads',
             'stm32g431_src/svd/i-stm32-adc.ads',
             'stm32g431_src/svd/i-stm32-aes.ads',
             'stm32g431_src/svd/i-stm32-comp.ads',
@@ -95,6 +98,7 @@ class STM32G431(arm.cortexm.ArmV7MTarget):
 
         self.add_gnarl_sources(
             'stm32g431_src/s-bbpara.ads',
+            'stm32g431_src/s-bbbosu.adb',
             'stm32g431_src/svd/handler.S',
             'stm32g431_src/svd/a-intnam.ads',
             'src/s-bcpcst__pendsv.adb')

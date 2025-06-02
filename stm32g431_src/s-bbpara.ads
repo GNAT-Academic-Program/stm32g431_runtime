@@ -38,10 +38,9 @@
 --  These parameters are in this package in order to isolate target
 --  dependencies.
 
---  This is the nRF52840 (ARMv7) version of this package
+--  This is the STM32G431 (Cortex-M4) version of this package
 
 with System.BB.Board_Parameters;
-with System.BB.MCU_Parameters;
 
 package System.BB.Parameters is
    pragma No_Elaboration_Code_All;
@@ -49,6 +48,70 @@ package System.BB.Parameters is
 
    Clock_Frequency : constant := Board_Parameters.Main_Clock_Frequency;
    Ticks_Per_Second : constant := Clock_Frequency;
+
+   --  Set the requested SYSCLK frequency. Setup_Pll will try to set configure
+   --  PLL to match this value when possible or reset the board.
+
+   ----------------
+   -- Prescalers --
+   ----------------
+
+   type AHB_Prescaler_Enum is
+     (AHB_DIV2, AHB_DIV4, AHB_DIV8, AHB_DIV16,
+      AHB_DIV64, AHB_DIV128, AHB_DIV256, AHB_DIV512)
+     with Size => 3;
+
+   type AHB_Prescaler is record
+      Enabled : Boolean := False;
+      Value   : AHB_Prescaler_Enum := AHB_Prescaler_Enum'First;
+   end record with Size => 4;
+
+   for AHB_Prescaler use record
+      Enabled at 0 range 3 .. 3;
+      Value   at 0 range 0 .. 2;
+   end record;
+
+   type APB_Prescaler_Enum is (APB_DIV2, APB_DIV4, APB_DIV8, APB_DIV16)
+     with Size => 2;
+
+   type APB_Prescaler is record
+      Enabled : Boolean;
+      Value   : APB_Prescaler_Enum;
+   end record with Size => 3;
+
+   for APB_Prescaler use record
+      Enabled at 0 range 2 .. 2;
+      Value   at 0 range 0 .. 1;
+   end record;
+
+   AHB_PRE  : constant AHB_Prescaler :=
+      (Enabled => False, Value => AHB_DIV2);
+   APB1_PRE : constant APB_Prescaler :=
+      (Enabled => True, Value => APB_DIV4);
+   APB2_PRE : constant APB_Prescaler :=
+      (Enabled => True, Value => APB_DIV2);
+
+   -------------------
+   -- Clocks --
+   -------------------
+
+   HSE_Clock : constant := Board_Parameters.HSE_Clock_Frequency;
+
+   HSI_Clock : constant := 16_000_000;
+
+   Has_FPU : constant Boolean := True;
+   --  Set to true if core has a FPU
+
+   Has_VTOR : constant Boolean := True;
+   --  Set to true if core has a Vector Table Offset Register (VTOR).
+   --  VTOR is implemented in Cortex-M0+, Cortex-M4 and above.
+
+   Has_OS_Extensions : constant Boolean := True;
+   --  Set to true if core has armv6-m OS extensions (PendSV, MSP, PSP,
+   --  etc...). The OS extensions are optional for the Cortex-M1.
+
+   Is_ARMv6m : constant Boolean := False;
+   --  Set to true if core is an armv6-m (Cortex-M0, Cortex-M0+, Cortex-M1)
 
    ----------------
    -- Interrupts --
@@ -63,8 +126,10 @@ package System.BB.Parameters is
    NVIC_Priority_Bits : constant Cortex_Priority_Bits_Width := 4;
    --  The number of bits allocated by this specific hardware implementation.
 
+   Number_Of_Interrupts : constant := 101;
+
    subtype Interrupt_Range is Integer
-     range -1 .. MCU_Parameters.Number_Of_Interrupts;
+     range -1 .. Number_Of_Interrupts;
    --  Number of interrupts for the interrupt controller
 
    Trap_Vectors : constant := 17;
@@ -105,20 +170,6 @@ package System.BB.Parameters is
 
    Interrupt_Sec_Stack_Size : constant := 128;
    --  Size of the secondary stack for interrupt handlers
-
-   Has_FPU : constant Boolean := True;
-   --  Set to true if core has a FPU
-
-   Has_VTOR : constant Boolean := True;
-   --  Set to true if core has a Vector Table Offset Register (VTOR).
-   --  VTOR is implemented in Cortex-M0+, Cortex-M4 and above.
-
-   Has_OS_Extensions : constant Boolean := True;
-   --  Set to true if core has armv6-m OS extensions (PendSV, MSP, PSP,
-   --  etc...). The OS extensions are optional for the Cortex-M1.
-
-   Is_ARMv6m : constant Boolean := False;
-   --  Set to true if core is an armv6-m (Cortex-M0, Cortex-M0+, Cortex-M1)
 
    ----------
    -- CPUs --

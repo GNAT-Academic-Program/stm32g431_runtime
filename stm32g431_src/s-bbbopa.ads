@@ -32,7 +32,7 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
---  This package defines board parameters for the nRF52840-DK board
+--  This package defines board parameters for the stm32f429disco
 
 package System.BB.Board_Parameters is
    pragma No_Elaboration_Code_All;
@@ -42,12 +42,16 @@ package System.BB.Board_Parameters is
    -- Hardware clock --
    --------------------
 
-   RTC_Tick_Scaling_Factor : constant := 32; --  32.768 kHz * 32 = 1.048576 MHz
-   --  Use a fairly high scaling factor so that Ada.Real_Time.Time_Unit is
-   --  at least 1 microsecond. This improves the long-running accuracy of
-   --  periodic tasks where the period is not integer divisible by 32.768 kHz.
-
    Main_Clock_Frequency : constant := 170_000_000;
-   
+   --  Optimal frequency of the system clock. Note that the STM32F411 can go
+   --  up to 200 MHz, but all other STM32F40x and STM32F41x MCUs can only do
+   --  168 MHz.
+
+   HSE_Clock_Frequency : constant := 24_000_000;
+   --  Frequency of High Speed External clock.
+
+   FLASH_Latency : constant := 5;
+   PLLP_Value    : constant := 2;
+   PLLQ_Value    : constant := 7;
 
 end System.BB.Board_Parameters;

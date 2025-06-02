@@ -6,7 +6,7 @@
 --                                                                          --
 --                                  S p e c                                 --
 --                                                                          --
---                      Copyright (C) 2016, AdaCore                         --
+--                      Copyright (C) 2019, AdaCore                         --
 --                                                                          --
 -- GNAT is free software;  you can  redistribute it  and/or modify it under --
 -- terms of the  GNU General Public License as published  by the Free Soft- --
@@ -32,16 +32,12 @@
 --                                                                          --
 ------------------------------------------------------------------------------
 
---  This package defines MCU parameters for the STM32F40x family
-
-with Interfaces.STM32;
-with Interfaces.STM32.PWR;
+--  This package defines MCU parameters for the stm32g431 family
 
 package System.BB.MCU_Parameters is
    pragma No_Elaboration_Code_All;
    pragma Preelaborate;
 
    Number_Of_Interrupts : constant := 101;
-   
-end System.BB.MCU_Parameters;
 
+end System.BB.MCU_Parameters;
